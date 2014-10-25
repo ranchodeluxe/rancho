@@ -1,0 +1,17 @@
+{
+  "name": "rancho",
+  "version": "0.0.0",
+  "dependencies": {},
+  "devDependencies": {
+    "browserify": "^6.2.0",
+    "tape": "^2.14.0",
+    "faucet": "0.0.1",
+    "testling": "~1.7.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+ "scripts": {
+    "build": "browserify -d src/rancho.js -o dist/rancho.js"
+  }
+}

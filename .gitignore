@@ -1,0 +1,6 @@
+*.swp
+logs
+*.log
+.grunt
+build/Release
+node_modules
