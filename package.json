@@ -5,6 +5,7 @@
   "devDependencies": {
     "browserify": "^6.2.0",
     "tape": "^2.14.0",
+    "q": "^1.0.1",
     "faucet": "0.0.1",
     "testling": "~1.7.0"
   },
