@@ -13,40 +13,39 @@
    '     '      '      '       '       '       '   )/       '     '         '    '     
                                                    '                                   
 
-================================================================================================
+###Rancho
+
+not as verbose as Backbone, because all we need is the inheritence pattern
+
+devoid of Angular's $100 concepts and lingo
+
+a single abstract controller
+
+very manual
+
+very much in bed with jQuery
 
 
-###Rancho:
+###Development
 
-    not as verbose as Backbone, because all we need is the inheritence pattern
-
-    devoid of Angular's $100 concepts and lingo
-
-    a single abstract controller
-
-    very manual
-
-    very much in bed with jQuery
+run ```sh python -m SimpleHTTPServer <port>``` from root directory and go look at /examples
 
 
-###Development:
+###TODO
 
-    run ```sh python -m SimpleHTTPServer <port>``` from root directory
+add Q.js to package.json
 
+add build tools -- Makefile and watcher.sh
 
-###TODO:
+implement qajax helpers -- Q.js wrapping ajax calls
 
-    add build tools -- Makefile and watcher.sh
+implement logging helpers
 
-    implement qajax helpers -- Q.js wrapping ajax calls
-    
-    implement logging helpers
+implement formatting helpers
 
-    implement formatting helpers
+implement templating examples ( handlebars, mustache, underscore )
 
-    implement templating examples ( handlebars, mustache, underscore )
-
-    implement lots of examples
+implement lots of examples
 
     
 
