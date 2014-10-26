@@ -27,9 +27,14 @@
 * still in love with jQuery
 
 
-###Development
+###Getting Started
 
-run ```sh python -m SimpleHTTPServer <port>``` from root directory and go look at /examples
+```sh
+git clone git@github.com:thebigspoon/rancho.git
+cd /<rancho-git-clone>/
+python -m SimpleHTTPServer <port>
+``` 
+open your browser and go look at /examples
 
 
 ###TODO
@@ -46,7 +51,7 @@ run ```sh python -m SimpleHTTPServer <port>``` from root directory and go look a
 
 * implement templating examples ( handlebars, mustache, underscore )
 
-implement lots of examples
+* implement lots of examples
 
     
 
