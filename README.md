@@ -31,7 +31,7 @@
 
 ```sh
 git clone git@github.com:thebigspoon/rancho.git
-cd /<rancho-git-clone>/
+cd racho/
 python -m SimpleHTTPServer <port>
 ``` 
 open your browser and go look at /examples
