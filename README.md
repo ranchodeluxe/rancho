@@ -16,7 +16,7 @@
 
 ###Rancho
 
-* not as verbose as Backbone, because all we need is the inheritence pattern and pub/sub
+* not as verbose as Backbone, because all we need is the inheritence pattern
 
 * devoid of Angular's $100 concepts and lingo
 
