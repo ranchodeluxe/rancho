@@ -39,10 +39,6 @@ open your browser and go look at /examples
 
 ###TODO
 
-* add Q.js to package.json
-
-* add build tools -- Makefile and watcher.sh
-
 * implement qajax helpers -- Q.js wrapping ajax calls
 
 * implement logging helpers
