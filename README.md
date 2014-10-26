@@ -16,15 +16,11 @@
 
 ###Rancho
 
-* not as verbose as Backbone, because all we need is the inheritence pattern
-
-* devoid of Angular's $100 concepts and lingo
-
 * a single abstract controller
 
-* for the very manual manhandled wrangler
+* for the manual, manhandled and grizzled JS wrangler
 
-* still in love with jQuery
+* still in love with jQuery after all these years
 
 
 ###Getting Started
@@ -39,15 +35,11 @@ open your browser and go look at /examples
 
 ###TODO
 
-* implement qajax helpers -- Q.js wrapping ajax calls
-
-* implement logging helpers
-
 * implement formatting helpers
 
 * implement templating examples ( handlebars, mustache, underscore )
 
-* implement lots of examples
+* implement code examples
 
     
 
