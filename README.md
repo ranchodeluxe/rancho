@@ -1,3 +1,6 @@
+###Status
+[![Build Status](https://travis-ci.org/thebigspoon/rancho.png)](https://travis-ci.org/thebigspoon/rancho)
+
 ```vim                                                                                 
      _____         _____  _____   ______         _____    ____   ____         _____    
  ___|\    \    ___|\    \|\    \ |\     \    ___|\    \  |    | |    |   ____|\    \   
