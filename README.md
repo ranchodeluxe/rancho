@@ -21,7 +21,7 @@
 
 * a single abstract controller
 
-* for the manual, manhandled and grizzled JS wrangler
+* for the JS wrangler who prefers manual-manhandling instead of magic
 
 * still in love with jQuery after all these years
 
