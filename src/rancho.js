@@ -15,9 +15,8 @@ if ( typeof window !== "undefined" ) {
 // CommonJS
 } else if ( typeof exports === "object" && typeof module === "object" ) {
 
-    module.exports.Rancho = {};
-    module.exports.Rancho.AbstractController = AbstractController;
-    module.exports.Rancho.utils = { object_extend : object_extend  };
-    module.exports.Rancho.formatters = formatters;
+    module.exports.AbstractController = AbstractController;
+    module.exports.utils = { object_extend : object_extend  };
+    module.exports.formatters = formatters;
 
 }
