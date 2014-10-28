@@ -20,7 +20,7 @@
 
 * a single abstract controller
 
-* for the JS wrangler who prefers manual-manhandling instead of magic
+* for the JS wrangler who prefers manual-manhandling to magic
 
 * still in love with jQuery after all these years
 
