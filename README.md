@@ -35,7 +35,7 @@ open your browser and go look at /examples
 
 ###TODO
 
-* implement formatting helpers
+* write tests
 
 * implement templating examples ( handlebars, mustache, underscore )
 
