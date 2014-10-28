@@ -1,4 +1,3 @@
-###Status
 [![Build Status](https://travis-ci.org/thebigspoon/rancho.png)](https://travis-ci.org/thebigspoon/rancho)
 
 ```vim                                                                                 
