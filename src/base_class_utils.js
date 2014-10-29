@@ -51,9 +51,8 @@ ClassExtend.extend = function( proto_props, static_props ) {
     if (proto_props && proto_props.hasOwnProperty('constructor')) {
         child = proto_props.constructor;
         //
-        // later when we extend child.prototype
-        // we don't want constructor cruft hanging
-        // off the prototype, so remove it
+        // later when we object_extend( child.prototype ... )
+        // we don't want to add this again 
         //
         delete proto_props[ 'constructor' ];
     } else {
