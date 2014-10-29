@@ -7,6 +7,7 @@ var test = require('tape')
 **  test Racho.utils.object_extend
 **
 */
+/*
 test( 'object extend no own props', function ( t ) {
 
     var data = {
@@ -85,44 +86,159 @@ test( 'make sure own properties do not get copied', function ( t ) {
     t.end();
 
 });
-
+*/
 
 
 /*
 **
-**  test Racho.AbstractController
+**  test Racho.ClassExtend
 **
 */
 
-test( 'object extend multiple source overrides left to right', function ( t ) {
+//
+//  there are two identical patterns for how we can use ClassExtend to subclass.
+//  -----------------------------------------------------------------------------
+//  we can either use ClassExtend.extend directly to create subclasses and
+//  pass a 'constructor' option as a proto property that the subclass will use
+//  -----
+//  or 
+//  -----
+//  we can create normal constructors and give those constructors a static .extend 
+//  method that points to ClassExtend.extend. With this pattern the constructor
+//  will by default be used for subclasses
+//
+test( 'constructor pattern 1 no subclass', function ( t ) {
 
-    var data = {
-        chuck : 'norris' ,
-        1 : 2 ,
-        hash :  { 'yes' : 'sir' } ,
-        bool : true 
-    };
+    var Coat = Rancho.ClassExtend.extend( {
+            constructor : function ( a, b, c, d ) {
+                this.a = a;
+                this.b = b;
+                this.c = c;
+                this.d = d;
+            }
+        } , {
 
-    var data2 = {
-        chuck : 'morris' ,
-        1 : 3 ,
-        hash :  { 'no' : 'sir' } ,
-        bool : false
-    };
+    } )
 
-    var dest = Rancho.utils.object_extend( {}, data, data2 );
+    var a = 'i', 
+        b = 'am', 
+        c = ['a'] , 
+        d = { 'coat' : true };
+    var coat = new Coat( a, b, c, d );
 
-    t.notEqual( dest.chuck, data.chuck );
-    t.notEqual( dest[ '1' ] , data[ '1' ] );
-    t.notEqual( dest.hash , data.hash );
-    t.notEqual( dest.bool, data.bool );
+    t.equal( coat.a, a );
+    t.equal( coat.b, b );
+    t.deepEqual( coat.c, c );
+    t.deepEqual( coat.d, d );
+    t.equal( coat instanceof Coat, true );
+
+    t.end();
+
+});
+
+test( 'constructor pattern 1 with subclass', function ( t ) {
+
+    var Coat = Rancho.ClassExtend.extend( {
+            constructor : function ( a, b, c, d, e, f ) {
+                this.a = a;
+                this.b = b;
+                this.c = c;
+                this.d = d;
+                this.e = e;
+                this.f = f;
+            }
+        } , {
+
+    } )
+
+    var Pancho = Coat.extend({},{});
+
+    var a = 'i', 
+        b = 'am', 
+        c = ['a'] , 
+        d = { 'coat' : true },
+        e = 'and' ,
+        f = Pancho;
+    var coat = new Pancho( a, b, c, d, e, f );
+
+    t.equal( coat.a, a );
+    t.equal( coat.b, b );
+    t.deepEqual( coat.c, c );
+    t.deepEqual( coat.d, d );
+    t.equal( coat.e, e );
+    t.deepEqual( coat.f, f );
+    t.equal( coat instanceof Coat, true );
+    t.equal( coat instanceof Pancho, true );
+
+    t.end();
+
+});
+
+test( 'constructor pattern 2 no subclass', function ( t ) {
+
+    var Coat =  function ( a, b, c, d ) {
+                    this.a = a;
+                    this.b = b;
+                    this.c = c;
+                    this.d = d;
+                };
+
+    Coat.extend = Rancho.ClassExtend.extend;
+
+    var a = 'i', 
+        b = 'am', 
+        c = ['a'] , 
+        d = { 'coat' : true };
+    var coat = new Coat( a, b, c, d );
+
+    t.equal( coat.a, a );
+    t.equal( coat.b, b );
+    t.deepEqual( coat.c, c );
+    t.deepEqual( coat.d, d );
+    t.equal( coat instanceof Coat, true );
+
+    t.end();
+
+});
+
+test( 'constructor pattern 2 with subclass', function ( t ) {
+
+    var Coat =  function ( a, b, c, d, e, f ) {
+                    this.a = a;
+                    this.b = b;
+                    this.c = c;
+                    this.d = d;
+                    this.e = e;
+                    this.f = f;
+                };
+    Coat.extend = Rancho.ClassExtend.extend;
+
+
+
+    var Pancho = Coat.extend({},{});
+
+    var a = 'i', 
+        b = 'am', 
+        c = ['a'] , 
+        d = { 'coat' : true },
+        e = 'and' ,
+        f = Pancho;
+    var coat = new Pancho( a, b, c, d, e, f );
+
+    t.equal( coat.a, a );
+    t.equal( coat.b, b );
+    t.deepEqual( coat.c, c );
+    t.deepEqual( coat.d, d );
+    t.equal( coat.e, e );
+    t.deepEqual( coat.f, f );
+    t.equal( coat instanceof Coat, true );
+    t.equal( coat instanceof Pancho, true );
 
     t.end();
 
 });
 
 
-// test ClassExtend .extend  with simple constructor
 
 // test ClassExtend .extend  with static and prototype props to make sure they get put in the same place at 2 levels 
 
