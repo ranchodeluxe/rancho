@@ -49,9 +49,15 @@ ClassExtend.extend = function( proto_props, static_props ) {
     // (the "constructor" property in your `extend` definition), or defaulted
     // by us to simply call the parent's constructor.
     if (proto_props && proto_props.hasOwnProperty('constructor')) {
-      child = proto_props.constructor;
+        child = proto_props.constructor;
+        //
+        // later when we extend child.prototype
+        // we don't want constructor cruft hanging
+        // off the prototype, so remove it
+        //
+        delete proto_props[ 'constructor' ];
     } else {
-      child = function(){ return parent_object = parent.apply(this, arguments); }
+        child = function(){ return parent_object = parent.apply(this, arguments); }
     }    
 
     // Add static properties to the constructor function, if supplied.
