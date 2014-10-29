@@ -240,9 +240,16 @@ test( 'constructor pattern 2 with subclass', function ( t ) {
 
 
 
-// test ClassExtend .extend  with static and prototype props to make sure they get put in the same place at 2 levels 
+// test ClassExtend .extend with statics 
+
+// test ClassExtend .extend Surrogate.prototype logic
+
+// test ClassExtend .extend with prototype props 
 
 // test ClassExtend .extend  with  __super__ to make sure it still has reference to Parent.statics and own properties
+
+
+
 
 // test AbstractController constructor with selectors and regular variables, make sure they get copied to first-level instance variables
 
