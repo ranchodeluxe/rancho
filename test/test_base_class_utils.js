@@ -7,7 +7,6 @@ var test = require('tape')
 **  test Racho.utils.object_extend
 **
 */
-/*
 test( 'object extend no own props', function ( t ) {
 
     var data = {
@@ -86,7 +85,6 @@ test( 'make sure own properties do not get copied', function ( t ) {
     t.end();
 
 });
-*/
 
 
 /*
