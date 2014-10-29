@@ -298,74 +298,71 @@ test( 'ClassExtend.extend static pattern 1 with subclass', function ( t ) {
 
 });
 
-/*
-test( 'ClassExtend.extend constructor pattern 2 no subclass', function ( t ) {
+test( 'ClassExtend.extend statics pattern 2 with subclass', function ( t ) {
+    var generic_fn = function(){ this.toots = 'hoots' };
+    var statics = {
+        junk : 'trunk' ,
+        happy : true ,
+        nested : { 'yep' : true } ,
+        fn : generic_fn ,
+    };
 
-    var Coat =  function ( a, b, c, d ) {
-                    this.a = a;
-                    this.b = b;
-                    this.c = c;
-                    this.d = d;
-                };
-
+    var Coat = function () {};
     Coat.extend = Rancho.ClassExtend.extend;
+    var Pancho = Coat.extend( {}, statics );
+    var pancho = new Pancho();
+    
 
-    var a = 'i', 
-        b = 'am', 
-        c = ['a'] , 
-        d = { 'coat' : true };
-    var coat = new Coat( a, b, c, d );
-
-    t.equal( coat.a, a );
-    t.equal( coat.b, b );
-    t.deepEqual( coat.c, c );
-    t.deepEqual( coat.d, d );
-    t.equal( coat instanceof Coat, true );
+    // make sure statics are really statics
+    t.equal( typeof pancho.junk, 'undefined' );
+    t.equal( typeof pancho.happy, 'undefined' );
+    t.equal( typeof pancho.nested, 'undefined' );
+    t.equal( typeof pancho.fn, 'undefined' );
+    t.equal( pancho instanceof Coat, true );
+    t.equal( pancho instanceof Pancho, true );
+    t.equal( Pancho.junk, statics.junk );
+    t.equal( Pancho.happy, statics.happy );
+    t.deepEqual( Pancho.nested, statics.nested );
+    t.deepEqual( Pancho.fn, statics.fn );
 
     t.end();
 
 });
 
-test( 'ClassExtend.extend constructor pattern 2 with subclass', function ( t ) {
 
-    var Coat =  function ( a, b, c, d, e, f ) {
-                    this.a = a;
-                    this.b = b;
-                    this.c = c;
-                    this.d = d;
-                    this.e = e;
-                    this.f = f;
-                };
+// test ClassExtend .extend break-the-chain-type inheritence and logic around Surrogate.prototype 
+/*
+test( 'ClassExtend.extend surrogate pattern 2', function ( t ) {
+    var generic_fn = function(){ this.toots = 'hoots' };
+    var statics = {
+        junk : 'trunk' ,
+        happy : true ,
+        nested : { 'yep' : true } ,
+        fn : generic_fn ,
+    };
+
+    var Coat = function () {};
     Coat.extend = Rancho.ClassExtend.extend;
+    var Pancho = Coat.extend( {}, statics );
+    var pancho = new Pancho();
+    
 
-
-
-    var Pancho = Coat.extend({},{});
-
-    var a = 'i', 
-        b = 'am', 
-        c = ['a'] , 
-        d = { 'coat' : true },
-        e = 'and' ,
-        f = Pancho;
-    var coat = new Pancho( a, b, c, d, e, f );
-
-    t.equal( coat.a, a );
-    t.equal( coat.b, b );
-    t.deepEqual( coat.c, c );
-    t.deepEqual( coat.d, d );
-    t.equal( coat.e, e );
-    t.deepEqual( coat.f, f );
-    t.equal( coat instanceof Coat, true );
-    t.equal( coat instanceof Pancho, true );
+    // make sure statics are really statics
+    t.equal( typeof pancho.junk, 'undefined' );
+    t.equal( typeof pancho.happy, 'undefined' );
+    t.equal( typeof pancho.nested, 'undefined' );
+    t.equal( typeof pancho.fn, 'undefined' );
+    t.equal( pancho instanceof Coat, true );
+    t.equal( pancho instanceof Pancho, true );
+    t.equal( Pancho.junk, statics.junk );
+    t.equal( Pancho.happy, statics.happy );
+    t.deepEqual( Pancho.nested, statics.nested );
+    t.deepEqual( Pancho.fn, statics.fn );
 
     t.end();
 
 });
 */
-
-
-// test ClassExtend .extend Surrogate.prototype logic
 
 // test ClassExtend .extend with prototype props 
 
