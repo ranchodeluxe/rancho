@@ -333,7 +333,6 @@ test( 'ClassExtend.extend statics pattern 2 with subclass', function ( t ) {
 // test ClassExtend .extend break-the-chain-type inheritence and logic around Surrogate.prototype  and __super__
 test( 'ClassExtend.extend surrogate and super pattern 1', function ( t ) {
 
-    var generic_fn = function(){ this.toots = 'hoots' };
     var protos = {
         isproto : true , 
     };
@@ -362,43 +361,69 @@ test( 'ClassExtend.extend surrogate and super pattern 1', function ( t ) {
 
 });
 
-/*
 test( 'ClassExtend.extend surrogate and super pattern 2', function ( t ) {
-    var generic_fn = function(){ this.toots = 'hoots' };
-    var statics = {
-        junk : 'trunk' ,
-        happy : true ,
-        nested : { 'yep' : true } ,
-        fn : generic_fn ,
+
+    var protos = {
+        isproto : true , 
     };
 
-    var Coat = function () {};
+    var Coat = function(){}; 
+    Coat.prototype = protos;
     Coat.extend = Rancho.ClassExtend.extend;
-    var Pancho = Coat.extend( {}, statics );
+    var Pancho = Coat.extend( {},{} );
     var pancho = new Pancho();
     
 
-    // make sure statics are really statics
-    t.equal( typeof pancho.junk, 'undefined' );
-    t.equal( typeof pancho.happy, 'undefined' );
-    t.equal( typeof pancho.nested, 'undefined' );
-    t.equal( typeof pancho.fn, 'undefined' );
+    //
+    // we need to check three things:
+    // 1. that we have access to var from instance ( proves inheritence )
+    // 2. that var is really accessible through the __super__
+    // 3. that var is not on the instance
+    // 4. that the child.constructor and the child.constructor.prototype.constructor are the equivalent ( proves we can't access the parent and break the chain inheritance )
+    // 5. that the child.constructor.prototype and the child.constructor.prototype.constructor.prototype are the equivalent ( proves we can't acces the parent and break the chain inheritance )
+    //
+    t.equal( pancho.isproto, protos.isproto );
+    t.equal( pancho.constructor.__super__.isproto, protos.isproto );
+    t.equal( pancho.hasOwnProperty( 'isproto' ), false );
+    t.deepEqual( pancho.constructor, pancho.constructor.prototype.constructor );
+    t.deepEqual( pancho.constructor.prototype, pancho.constructor.prototype.constructor.prototype );
     t.equal( pancho instanceof Coat, true );
     t.equal( pancho instanceof Pancho, true );
-    t.equal( Pancho.junk, statics.junk );
-    t.equal( Pancho.happy, statics.happy );
-    t.deepEqual( Pancho.nested, statics.nested );
-    t.deepEqual( Pancho.fn, statics.fn );
+    t.end();
 
+});
+
+/*
+// test ClassExtend .extend with prototype props make sure child overrides parent
+test( 'ClassExtend.extend surrogate and super pattern 2', function ( t ) {
+
+    var protos = {
+        isproto : true , 
+    };
+
+    var Coat = function(){}; 
+    Coat.prototype = protos;
+    Coat.extend = Rancho.ClassExtend.extend;
+    var Pancho = Coat.extend( { isproto : false },{} );
+    var pancho = new Pancho();
+    
+    //
+    // we need to check three things:
+    // 1. that child overrides parent of same name
+    // 2. that __super__ still has access to proto
+    // 3. that constructor.prototype still points to child
+    // 4. that these are not own properties
+    //
+    t.equal( pancho.isproto, false );
+    t.equal( pancho.constructor.__super__.isproto, true );
+    t.equal( pancho.constructor.prototype.isproto, false );
+    t.equal( pancho.hasOwnProperty( 'isproto' ), false );
+    t.equal( pancho instanceof Coat, true );
+    t.equal( pancho instanceof Pancho, true );
     t.end();
 
 });
 */
-
-// test ClassExtend .extend with prototype props 
-
-// test ClassExtend .extend  with  __super__ to make sure it still has reference to Parent.statics and own properties
-
 
 
 
