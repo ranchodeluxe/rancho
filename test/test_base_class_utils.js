@@ -393,7 +393,6 @@ test( 'ClassExtend.extend surrogate and super pattern 2', function ( t ) {
 
 });
 
-/*
 // test ClassExtend .extend with prototype props make sure child overrides parent
 test( 'ClassExtend.extend surrogate and super pattern 2', function ( t ) {
 
@@ -423,7 +422,6 @@ test( 'ClassExtend.extend surrogate and super pattern 2', function ( t ) {
     t.end();
 
 });
-*/
 
 
 
