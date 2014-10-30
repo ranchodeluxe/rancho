@@ -425,7 +425,34 @@ test( 'ClassExtend.extend surrogate and super pattern 2', function ( t ) {
 
 
 
-// test AbstractController constructor with selectors and regular variables, make sure they get copied to first-level instance variables
+// test AbstractController constructor with regular variables, make sure they get copied to first-level instance variables and override proto props
+test( 'AbstractController make sure first-level instance variables override protos', function ( t ) {
+
+    var generic_fn = function(){ this.toots = 'hoots' };
+    var protos = {
+        isproto : true , 
+    };
+
+    var Coat = Rancho.AbstractController.extend( protos, {} );
+    var pancho = new Coat({
+        isproto : false ,
+        junk : 'trunk' ,
+        happy : true ,
+        nested : { 'yep' : true } , 
+        fn : generic_fn ,
+    });
+    
+    t.equal( pancho.isproto, false );
+    t.equal( pancho.constructor.prototype.isproto, true ); // make sure proto is still true
+    t.equal( pancho.hasOwnProperty( 'isproto' ), true );
+    t.equal( pancho.junk, 'trunk' );
+    t.equal( pancho.happy, true );
+    t.deepEqual( pancho.nested, { 'yep' : true } );
+    t.deepEqual( pancho.fn, generic_fn );
+    t.equal( pancho instanceof Coat, true );
+    t.end();
+
+});
 
 // test AbstractController constructor for option_overrides to make sure they are overidden
 
