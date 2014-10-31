@@ -1,4 +1,8 @@
-var test = require('tape')
+var test = require( 'tape' ) ,
+    jsdom = require( "jsdom" ) ,
+    fs = require( "fs" ) ,
+    jquery = fs.readFileSync( "../lib/jquery.2.1.1.min.js", "utf-8" ) ,
+    BrowserRancho = fs.readFileSync( "../dist/rancho.js", "utf-8" ) ,
     Rancho = require('../src/rancho.js' );
 
 
@@ -453,6 +457,36 @@ test( 'AbstractController make sure first-level instance variables override prot
     t.end();
 
 });
+
+
+// test AbstractController constructor with  _selectors and make sure they converted
+jsdom.env( {
+    html : "<html><body><div id='foo'>HOTDAMN!</div></body></html>" ,
+    src : [jquery, BrowserRancho] ,
+    done : function (errors, window) {
+
+        var $ = window.$;
+        var Rancho = window.Rancho;
+
+
+
+        test( 'AbstractController make sure _select magic works', function ( t ) {
+
+            var Coat = Rancho.AbstractController.extend( {}, {} );
+            var coat = new Coat({
+                foo_selector : 'div#foo' ,
+            });  
+
+            t.notEqual( typeof coat.$foo, 'undefined' );
+            t.equal( coat.$foo.text(), 'HOTDAMN!' );
+            t.equal( coat instanceof Coat, true );
+            t.end();
+
+        });
+
+    }
+} );
+
 
 // test AbstractController constructor for option_overrides to make sure they are overidden
 
