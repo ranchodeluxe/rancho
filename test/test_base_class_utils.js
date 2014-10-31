@@ -479,7 +479,7 @@ test( 'AbstractController constructor default_options and options_overrides play
 
     t.equal( pancho.is_default, true );
     t.equal( pancho.is_override, true );
-    t.equal( pancho.constructor.prototype.is_default, false );
+    t.equal( pancho.constructor.prototype.default_options.is_default, false );
     t.equal( pancho instanceof Coat, true );
     t.equal( pancho instanceof Pancho, true );
     t.end();
@@ -526,8 +526,70 @@ jsdom.env( {
 } );
 
 
-
 // test AbstractController constructor  to make sure  initialize() is called if it is an option
+jsdom.env( {
+    html : "<html><body><div id='foo'>HOTDAMN!</div></body></html>" ,
+    src : [jquery, BrowserRancho] ,
+    done : function (errors, window) {
+
+        var $ = window.$;
+        var Rancho = window.Rancho;
+
+        test( 'AbstractController make initialize() gets called if its an option', function ( t ) {
+
+            // create base class
+            var Coat = Rancho.AbstractController.extend( {
+                    
+                    initialize : function() {
+                        this.bind_event_subscribers();            
+                        this.setup();
+                    } ,
+
+            },{} );
+            
+            // create subclass
+            var Pancho = Coat.extend( {}, {} );
+            Pancho.prototype.default_options = {
+                pubsub : {} ,
+                pubsub_result : null ,
+                click_result : null ,
+            };
+            Pancho.prototype.bind_event_subscribers = function () {
+
+                // pubsub event
+                $( this.pubsub ).on( 'readyset', function () {
+                    this.pubsub_result = 'go'; 
+                }.bind( this ));
+
+                // click event
+                this.$foo.on( 'click', function () {
+                    this.click_result = 'clicked'; 
+                }.bind( this ));
+
+            };
+            Pancho.prototype.setup = function() {
+
+                $( this.pubsub ).trigger( 'readyset' );
+
+                this.$foo.click();
+            };
+            
+    
+            // instantiate
+            var pancho = new Pancho({
+                foo_selector : 'div#foo' ,
+            });  
+
+            t.equal( pancho.pubsub_result, 'go' );
+            t.equal( pancho.click_result, 'clicked' );
+            t.equal( pancho instanceof Coat, true );
+            t.equal( pancho instanceof Pancho, true );
+            t.end();
+
+        });
+
+    }
+} );
 
 // test AbstractController constructor  to make sure  on_initialize() is called if it is an option
 
