@@ -460,7 +460,6 @@ test( 'AbstractController make sure first-level instance variables override prot
 
 
 // test AbstractController constructor for default_options and option_overrides 
-/*
 test( 'AbstractController constructor default_options and options_overrides play nice', function ( t ) {
 
     // create base class
@@ -486,7 +485,6 @@ test( 'AbstractController constructor default_options and options_overrides play
     t.end();
 
 });
-*/
 
 
 // test AbstractController constructor with  _selector and validate their coercion 
