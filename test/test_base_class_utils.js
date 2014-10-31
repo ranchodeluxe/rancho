@@ -1,8 +1,8 @@
 var test = require( 'tape' ) ,
     jsdom = require( "jsdom" ) ,
     fs = require( "fs" ) ,
-    jquery = fs.readFileSync( "../lib/jquery.2.1.1.min.js", "utf-8" ) ,
-    BrowserRancho = fs.readFileSync( "../dist/rancho.js", "utf-8" ) ,
+    jquery = fs.readFileSync( "./lib/jquery.2.1.1.min.js", "utf-8" ) ,
+    BrowserRancho = fs.readFileSync( "./dist/rancho.js", "utf-8" ) ,
     Rancho = require('../src/rancho.js' );
 
 
