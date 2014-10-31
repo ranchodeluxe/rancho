@@ -16,6 +16,7 @@
   },
  "scripts": {
     "build": "browserify --debug -e src/rancho.js -o dist/rancho.js" ,
+    "pretest" : "cp dist/rancho.js lib/rancho.js" ,
     "test" : "node test/*.js"
   }
 }
