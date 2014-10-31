@@ -1,10 +1,7 @@
-/*
-**
-**  some tests require fs to read jquery and rancho builds
-**  before running tests. Travis CI expects that the tests
-**  will be run from root directory like below
-**
-*/
+some tests require the 'fs' module to read jquery and rancho builds
+before running tests. Travis CI expects that the tests
+will be run from root directory like below
+-----------------------------------------------------------------------
 
 ``bash
 cd /rancho
