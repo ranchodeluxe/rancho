@@ -459,7 +459,37 @@ test( 'AbstractController make sure first-level instance variables override prot
 });
 
 
-// test AbstractController constructor with  _selectors and make sure they converted
+// test AbstractController constructor for default_options and option_overrides 
+/*
+test( 'AbstractController constructor default_options and options_overrides play nice', function ( t ) {
+
+    // create base class
+    var Coat = Rancho.AbstractController.extend( {}, {} );
+    
+    // create subclass
+    var Pancho = Coat.extend( {}, {} );
+    Pancho.prototype.default_options = {
+        is_default : false ,
+    };
+
+    // instantiate
+    var pancho = new Pancho({
+        is_default : true ,
+        is_override :  true ,
+    });  
+
+    t.equal( pancho.is_default, true );
+    t.equal( pancho.is_override, true );
+    t.equal( pancho.constructor.prototype.is_default, false );
+    t.equal( pancho instanceof Coat, true );
+    t.equal( pancho instanceof Pancho, true );
+    t.end();
+
+});
+*/
+
+
+// test AbstractController constructor with  _selector and validate their coercion 
 jsdom.env( {
     html : "<html><body><div id='foo'>HOTDAMN!</div></body></html>" ,
     src : [jquery, BrowserRancho] ,
@@ -468,18 +498,28 @@ jsdom.env( {
         var $ = window.$;
         var Rancho = window.Rancho;
 
-
-
         test( 'AbstractController make sure _select magic works', function ( t ) {
 
+            // create base class
             var Coat = Rancho.AbstractController.extend( {}, {} );
-            var coat = new Coat({
+            
+            // create subclass
+            var Pancho = Coat.extend( {}, {} );
+            Pancho.prototype.default_options = {
+                default_foo_selector : 'div#foo' ,
+            };
+
+            // instantiate
+            var pancho = new Pancho({
                 foo_selector : 'div#foo' ,
             });  
 
-            t.notEqual( typeof coat.$foo, 'undefined' );
-            t.equal( coat.$foo.text(), 'HOTDAMN!' );
-            t.equal( coat instanceof Coat, true );
+            t.notEqual( typeof pancho.$foo, 'undefined' );
+            t.notEqual( typeof pancho.$default_foo, 'undefined' );
+            t.equal( pancho.$foo.text(), 'HOTDAMN!' );
+            t.equal( pancho.$default_foo.text(), 'HOTDAMN!' );
+            t.equal( pancho instanceof Coat, true );
+            t.equal( pancho instanceof Pancho, true );
             t.end();
 
         });
@@ -488,7 +528,6 @@ jsdom.env( {
 } );
 
 
-// test AbstractController constructor for option_overrides to make sure they are overidden
 
 // test AbstractController constructor  to make sure  initialize() is called if it is an option
 
