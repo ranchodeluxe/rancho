@@ -458,6 +458,17 @@ test( 'AbstractController make sure first-level instance variables override prot
 
 });
 
+// test ClassExtend with nada being passed in
+test( 'ClassExtend with nada being passed in for protos or statics' , function ( t ) {
+
+    var Coat = Rancho.ClassExtend.extend();  // nothing being passed for protos or static hashes
+    var coat = new Coat();
+
+    // if it doesn't blow up, it's all good
+    t.equal( coat instanceof Coat, true );
+    t.end();
+
+});
 
 // test AbstractController constructor for default_options and option_overrides 
 test( 'AbstractController constructor default_options and options_overrides play nice', function ( t ) {
