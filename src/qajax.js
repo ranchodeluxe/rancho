@@ -2,18 +2,6 @@ var Q = require( 'q' );
  
 module.exports = {
  
-    encode: function( input ) {
- 
-      return $('<div/>').text(input).html();
- 
-    } ,
- 
-    decode: function( input ) {
- 
-      return $('<div/>').html(input).text();
- 
-    } ,
- 
     qajax: function (options) {
         options || ( options = {} )
  
