@@ -1,13 +1,75 @@
-<html>
-    <head>
-        <title>Coming Soon</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div id="foo">Coming Soon...</div>
-        <script src="../lib/jquery.2.1.1.min.js"></script>
-        <script src="../dist/rancho.js"></script>
-        <script src="getting_started.js"></script>
-    </body>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Getting Started</title>
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+
+    <style>
+
+        #mapContainer { height: 380px; width: 50%; }
+
+    </style>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <h1>/h1>
+
+    <div id="mapContainer">
+
+    </div>
+    <div id="myResults">
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="../lib/jquery.2.1.1.min.js"></script>
+    <script src="../dist/rancho.js"></script>
+    <script src="getting_started.js"></script>
+
+    <script type="text/javascript">
+        //initialize the map
+        var map = L.map('mapContainer').setView([47.65, -122.4], 11);
+
+        //Add a basemap
+        L.tileLayer('http://{s}.tiles.mapbox.com/v3/spatialdev.map-c9z2cyef/{z}/{x}/{y}.png').addTo(map);
+    </script>
+
+
+    <script type="text/javascript">
+        //Use jQuery to call the API and get results
+        $(document).ready(function(){
+
+            //This is the URL (address) to the API endpoint you're interested in
+            var URL = "http://data.seattle.gov/resource/kzjm-xkqj.json";
+
+            $.getJSON(URL, function(result){
+
+                //After the API is successfully called, the flow comes here.
+                $.each(result, function(idx, item){
+                    //Write the item to a list
+                    $("#myResults").append(item.type);
+                    $("#myResults").append("<br>");
+
+                    //Add map marker
+                    if(item.latitude && item.longitude){
+                        L.marker([item.latitude, item.longitude]).addTo(map);
+                    }
+                });
+
+            });
+
+        });
+    </script>
+</body>
 </html>
+
+
