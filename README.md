@@ -31,8 +31,13 @@
 git clone git@github.com:thebigspoon/rancho.git
 cd racho/
 python -m SimpleHTTPServer <port>
+# open your browser and go look at /examples
+# or go read the /test suite
 ``` 
-open your browser and go look at /examples
+
+###Examples
+
+[Getting Started Example](http://thebigspoon.github.io/rancho/examples/getting_started.html)
 
 
 ###TODO
