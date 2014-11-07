@@ -1,9 +1,5 @@
 var map, rsidebar, lsidebar, drawControl, drawnItems = null;
-var apikey = window.location.hostname.indexOf('bboxfinder.com') !== -1 ? 'reprojected.g9on3k93' : 'examples.map-9ijuk24y';
-
-// Where we keep the big list of proj defs from the server
 var proj4defs = null;
-// Where we keep the proj objects we are using in this session
 var projdefs = {"4326":L.CRS.EPSG4326, "3857":L.CRS.EPSG3857};
 var currentproj = "3857";
 var currentmouse = L.latLng(0,0);
@@ -437,36 +433,12 @@ function formatPoint(point, proj) {
     return formattedBounds
 }
 
-function validateStringAsBounds(bounds) {
-    var splitBounds = bounds ? bounds.split(',') : null;
-    return ((splitBounds !== null) &&
-            (splitBounds.length == 4) &&
-            ((-90.0 <= parseFloat(splitBounds[0]) <= 90.0) &&
-             (-180.0 <= parseFloat(splitBounds[1]) <= 180.0) &&
-             (-90.0 <= parseFloat(splitBounds[2]) <= 90.0) &&
-             (-180.0 <= parseFloat(splitBounds[3]) <= 180.0)) &&
-            (parseFloat(splitBounds[0]) < parseFloat(splitBounds[2]) &&
-             parseFloat(splitBounds[1]) < parseFloat(splitBounds[3])))
-}
-
 $(document).ready(function() {
-    /* 
-    **
-    **  make sure all textarea inputs
-    **  are selected once they are clicked
-    **  because some people might not 
-    **  have flash enabled or installed
-    **  and yes...
-    **  there's a fucking Flash movie floating 
-    **  on top of your DOM
-    **
-    */
-    $('input[type="textarea"]').on( 'click', function( evt ) { this.select() } );
 
-    // Have to init the projection input box as it is used to format the initial values
-    $( "#projection" ).val(currentproj);
+    //47.589841 -122.319202
+    var map = L.map('map').setView([47.589841, -122.319202], 12);
+    L.tileLayer('http://{s}.tiles.mapbox.com/v3/spatialdev.map-c9z2cyef/{z}/{x}/{y}.png').addTo(map);
 
-    map = L.mapbox.map('map', apikey).setView([0, 0], 3);
 
     rsidebar = L.control.sidebar('rsidebar', {
         position: 'right',
@@ -482,124 +454,17 @@ $(document).ready(function() {
             $('#map .leaflet-tile-loaded').removeClass('unblurred');
         },7000);
     });
-    
     map.addControl(rsidebar);
 
     
-
-    lsidebar = L.control.sidebar('lsidebar', {
-        position: 'left'
-    });
-    
-    map.addControl(lsidebar);
-
     // Add in a crosshair for the map
     var crosshairIcon = L.icon({
-        iconUrl: 'images/crosshair.png',
+        iconUrl: '/examples/crosshair.png',
         iconSize:     [20, 20], // size of the icon
         iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
     });
     crosshair = new L.marker(map.getCenter(), {icon: crosshairIcon, clickable:false});
     crosshair.addTo(map);
-    
-    // Initialize the FeatureGroup to store editable layers
-    drawnItems = new L.FeatureGroup();
-    map.addLayer(drawnItems);
-    
-    // Initialize the draw control and pass it the FeatureGroup of editable layers
-    drawControl = new L.Control.Draw({
-        edit: {
-            featureGroup: drawnItems
-        }
-    });
-    map.addControl(drawControl);
-
-    /*
-    **
-    **  create bounds layer
-    **  and default it at first
-    **  to draw on null island
-    **  so it's not seen onload
-    **
-    */
-    startBounds = new L.LatLngBounds([0.0,0.0],[0.0,0.0]);
-    var bounds = new L.Rectangle(startBounds,
-        {
-            fill : false,
-            opacity : 1.0,
-            color : '#000'
-        }
-    );
-    bounds.on('bounds-set', function( e ) {
-        // move it to the end of the parent
-        var parent = e.target._container.parentElement;
-        $( parent ).append( e.target._container ); 
-        // Set the hash
-        var southwest = this.getBounds().getSouthWest();
-        var northeast = this.getBounds().getNorthEast();
-        var xmin = southwest.lng.toFixed(6);
-        var ymin = southwest.lat.toFixed(6);
-        var xmax = northeast.lng.toFixed(6);
-        var ymax = northeast.lat.toFixed(6);
-        location.hash = ymin+','+xmin+','+ymax+','+xmax;
-    });
-    map.addLayer(bounds)
-    map.on('draw:created', function (e) {
-        drawnItems.addLayer(e.layer);
-        bounds.setBounds(drawnItems.getBounds())
-        $('#boxbounds').text(formatBounds(bounds.getBounds(),'4326'));
-        $('#boxboundsmerc').text(formatBounds(bounds.getBounds(),currentproj));
-        if (!e.geojson &&
-            !((drawnItems.getLayers().length == 1) && (drawnItems.getLayers()[0] instanceof L.Marker))) {
-            map.fitBounds(bounds.getBounds());
-        } else {
-            if ((drawnItems.getLayers().length == 1) && (drawnItems.getLayers()[0] instanceof L.Marker)) {
-                map.panTo(drawnItems.getLayers()[0].getLatLng());
-            }
-        }
-    });
-    
-    map.on('draw:deleted', function (e) {
-        e.layers.eachLayer(function (l) {
-            drawnItems.removeLayer(l);
-        });
-        if (drawnItems.getLayers().length > 0 &&
-            !((drawnItems.getLayers().length == 1) && (drawnItems.getLayers()[0] instanceof L.Marker))) {
-            bounds.setBounds(drawnItems.getBounds())
-            $('#boxbounds').text(formatBounds(bounds.getBounds(),'4326'));
-            $('#boxboundsmerc').text(formatBounds(bounds.getBounds(),currentproj));
-            map.fitBounds(bounds.getBounds());
-        } else {
-            bounds.setBounds(new L.LatLngBounds([0.0,0.0],[0.0,0.0]));
-            $('#boxbounds').text(formatBounds(bounds.getBounds(),'4326'));
-            $('#boxboundsmerc').text(formatBounds(bounds.getBounds(),currentproj));
-            if (drawnItems.getLayers().length == 1) {
-                map.panTo(drawnItems.getLayers()[0].getLatLng());
-            }
-        }
-    });
-    
-    map.on('draw:edited', function (e) {
-        bounds.setBounds(drawnItems.getBounds())
-        $('#boxbounds').text(formatBounds(bounds.getBounds(),'4326'));
-        $('#boxboundsmerc').text(formatBounds(bounds.getBounds(),currentproj));
-        map.fitBounds(bounds.getBounds());
-    });
-    
-    function display() {
-        $('.zoomlevel').text(map.getZoom().toString());
-        $('.tilelevel').text(formatTile(new L.LatLng(0, 0),map.getZoom()));
-        $('#mapbounds').text(formatBounds(map.getBounds(),'4326'));
-        $('#mapboundsmerc').text(formatBounds(map.getBounds(),currentproj));
-        $('#center').text(formatPoint(map.getCenter(),'4326'));
-        $('#centermerc').text(formatPoint(map.getCenter(),currentproj));
-        $('#boxbounds').text(formatBounds(bounds.getBounds(),'4326'));
-        $('#boxboundsmerc').text(formatBounds(bounds.getBounds(),currentproj));
-        $('#mousepos').text(formatPoint(new L.LatLng(0, 0),'4326'));
-        $('#mouseposmerc').text(formatPoint(new L.LatLng(0, 0),currentproj));
-    }
-    display();
-
     map.on('move', function(e) {
         crosshair.setLatLng(map.getCenter());
     });
@@ -622,108 +487,6 @@ $(document).ready(function() {
         $('#mapboundsmerc').text(formatBounds(map.getBounds(),currentproj));
     });
 
-    var zeroFeedback = function( target ){
-
-        $(target).append( "<span id='zfeedback'>&nbsp;Copied!&nbsp;</span>" );
-
-        $('#zfeedback').css({
-             "background-color" : "#C7C700" ,
-             "font-stye" : "bold" ,
-             "border-radius" : "15px" ,
-             "padding" : "5px" ,
-             "box-shadow" : "0px 2px 20px #000"
-        });
-
-        $(target)
-            .animate( { opacity : 0 , top : "-=100" }, 500 );
-
-        setTimeout( function(){
-            $(target).css( "opacity", 1.0 );
-            $(target).css( "background-color", "" );
-            $('#zfeedback').remove();
-        }, 700 );
-
-    }
-
-    var boxboundclip = new ZeroClipboard( $("#boxboundsbtn"), {
-        moviePath: "/swf/ZeroClipboard.swf"
-    });
-    
-    boxboundclip.on( "load", function(client) {
-        client.on( "complete", function(client, args) {
-            zeroFeedback( client.htmlBridge );
-        });
-    });
-
-    var boxboundmercclip = new ZeroClipboard( $("#boxboundsmercbtn"), {
-        moviePath: "/swf/ZeroClipboard.swf"
-    });
-    
-    boxboundmercclip.on( "load", function(client) {
-        client.on( "complete", function(client, args) {
-            zeroFeedback( client.htmlBridge );
-        });
-    });
-
-    var mapboundclip = new ZeroClipboard( $("#mapboundsbtn"), {
-        moviePath: "/swf/ZeroClipboard.swf"
-    });
-    
-    mapboundclip.on( "load", function(client) {
-        client.on( "complete", function(client, args) {
-            zeroFeedback( client.htmlBridge );
-        });
-    });
-
-    var mapboundmercclip = new ZeroClipboard( $("#mapboundsmercbtn"), {
-        moviePath: "/swf/ZeroClipboard.swf"
-    });
-    
-    mapboundmercclip.on( "load", function(client) {
-        client.on( "complete", function(client, args) {
-            zeroFeedback( client.htmlBridge );
-        });
-    });
-
-    var centerclip = new ZeroClipboard( $("#centerbtn"), {
-        moviePath: "/swf/ZeroClipboard.swf"
-    });
-    
-    centerclip.on( "load", function(client) {
-        client.on( "complete", function(client, args) {
-            zeroFeedback( client.htmlBridge );
-        });
-    });
-
-    var centermercclip = new ZeroClipboard( $("#centermercbtn"), {
-        moviePath: "/swf/ZeroClipboard.swf"
-    });
-    
-    centermercclip.on( "load", function(client) {
-        client.on( "complete", function(client, args) {
-            zeroFeedback( client.htmlBridge );
-        });
-    });
-
-    // handle create-geojson click events
-    $('#create-geojson').click(function(){
-        rsidebar.toggle();
-        $('#create-geojson a').toggleClass('enabled');
-    });
-    // close right sidebar with leaflet's "X"
-    $('.right a.close').click(function(){
-        $('#create-geojson a').toggleClass('enabled');
-    });
-
-    // handle help button click events
-    $('#help').click(function(){
-        lsidebar.toggle();
-        $('#help a').toggleClass('enabled');
-    });
-    // close left sidebar with leaflet's "X"
-    $('.left a.close').click(function(){
-        $('#help a').toggleClass('enabled');
-    });
 
 
     // toggle #info-box
@@ -753,88 +516,6 @@ $(document).ready(function() {
         
     });
 
-    // handle geolocation click events
-    $('#geolocation').click( function(){
-        map.locate({setView: true, maxZoom: 8});
-        $('#geolocation a').toggleClass('active');
-    $('#geolocation a').toggleClass('active', 350);
-    });
-    
-
-
-    $('button#add').on( 'click', function(evt){
-        var sniffer = FormatSniffer( { data :  $('div#rsidebar textarea').val() } );
-        var is_valid = sniffer.sniff();
-        if (is_valid) {
-            rsidebar.hide();
-        $('#create-geojson a').toggleClass('enabled');
-            map.fitBounds(bounds.getBounds());
-        }
-    });
-    $('button#clear').on( 'click', function(evt){
-        $('div#rsidebar textarea').val('');
-    });
-
-    // Add in a layer to overlay the tile bounds of the google grid
-    var tiles = new L.tileLayer('/images/tile.png', {});
-    addLayer(tiles, '', "Google tile boundaries", 10, false)
-
-    // Test getting the proj strings
-    $.getJSON( "proj/proj4defs.json").done(function( data ) {
-        proj4defs = data;
-        var autocompdata = [];
-        $.each( data, function( key, val ) {
-            autocompdata.push({label:key+'-'+val[0],value:key})
-        });
-        $( "#projection" ).autocomplete({
-            source: autocompdata,
-            minLength: 3,
-            select: function( event, ui ) {
-                // Update all the proj windows
-                $('#projlabel').text('EPSG:'+ ui.item.value +' - ' + proj4defs[ui.item.value][0]);
-                currentproj = ui.item.value;
-                $('#boxboundsmerc').text(formatBounds(bounds.getBounds(),currentproj));
-                $('#mouseposmerc').text(formatPoint(new L.LatLng(0, 0),currentproj));
-                $('#mapboundsmerc').text(formatBounds(map.getBounds(),currentproj));
-                $('#centermerc').text(formatPoint(map.getCenter(),currentproj));
-            }
-        }).val('3857');
-        $('#projection').on( 'click', function(evt){
-             $( "#projection" ).autocomplete(  "search", currentproj  );
-        });        
-        // Set labels for output... left always 4326, right is proj selection
-        $('#wgslabel').text('EPSG:4326 - ' + proj4defs['4326'][0]);
-        $('#projlabel').text('EPSG:3857 - ' + proj4defs['3857'][0]);
-    }).fail(function( jqxhr, textStatus, error ) {
-        var err = textStatus + ", " + error;
-        console.log( "Request Failed: " + err );
-    });
-
-    var initialBBox = location.hash ? location.hash.replace(/^#/,'') : null;
-    if (initialBBox) {
-        if (validateStringAsBounds(initialBBox)) {
-            var splitBounds = initialBBox.split(',');
-            startBounds = new L.LatLngBounds([splitBounds[0],splitBounds[1]],
-                                             [splitBounds[2],splitBounds[3]]);
-            var lyr = new L.Rectangle( startBounds );    
-            var evt = {
-                layer : lyr,
-                layerType : "polygon",
-            } 
-            map.fire( 'draw:created', evt );
-            //map.fitBounds(bounds.getBounds());
-        } else {
-            // This will reset the hash if the original hash was not valid
-            bounds.setBounds(bounds.getBounds());
-        }
-    } else {
-        // Initially set the hash if there was not one set by the user
-        bounds.setBounds(bounds.getBounds());
-    }
-
-    $("input").click(function(e) {
-        display();
-    });
 
 });
 
