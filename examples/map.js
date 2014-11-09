@@ -1,6 +1,3 @@
-var Rancho = require('../src/rancho.js' );
-
-
 /*
 **
 **  constructor
@@ -9,9 +6,11 @@ var Rancho = require('../src/rancho.js' );
 var MapView = Rancho.AbstractController.extend({
      
         initialize : function() {
+            console.log( 'initialize' );
             this.setup();
         } ,
         on_initialize : function () {
+            console.log( 'on_initialize' );
             this.bind_event_subscribers();    
             this.render();    
         } ,
@@ -57,6 +56,7 @@ MapView.prototype.default_options = {
 
 
 MapView.prototype.bind_event_subscribers = function() {
+    console.log( 'bind_even_subscribers' );
 
     // info toggle
     this.$info_toggle.click(function(){
@@ -137,6 +137,7 @@ MapView.prototype.add_crosshair = function () {
 };
 
 MapView.prototype.setup = function () {
+    console.log( 'setup' );
 
     this.map = L.map('map').setView([47.589841, -122.319202], 12);
     L.tileLayer('http://{s}.tiles.mapbox.com/v3/spatialdev.map-c9z2cyef/{z}/{x}/{y}.png').addTo(map);
