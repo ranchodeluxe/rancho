@@ -1,5 +1,4 @@
 var MapView = require( './map.js' );
-
 (function( def ) {
 
     window.App = window.App || {};
