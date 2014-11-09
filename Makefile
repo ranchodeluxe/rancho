@@ -11,6 +11,7 @@ development:	clean browserify
 ##
 browserify:
 	$(BROWSERIFY) --debug -e src/rancho.js -o dist/rancho.js
+	$(BROWSERIFY) --debug -e examples/main.js -o examples/getting_started.js
 
 ##
 ##  CLEAN
