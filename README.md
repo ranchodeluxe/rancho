@@ -24,29 +24,24 @@
 
 * still in love with jQuery after all these years
 
+* a training lib that provides the framework basics without a committment to Backbone, Ember, Angular and others
+
 
 ###Getting Started
 
 ```sh
 git clone git@github.com:thebigspoon/rancho.git
+# go read the /test suite
 cd racho/
 python -m SimpleHTTPServer <port>
 # open your browser and go look at /examples
-# or go read the /test suite
 ``` 
-
-###Examples
-
-[Getting Started Example](http://thebigspoon.github.io/rancho/examples/getting_started.html)
-
 
 ###TODO
 
-* write tests
+* docs
 
-* implement templating examples ( handlebars, mustache, underscore )
-
-* implement code examples
+* more examples
 
     
 
