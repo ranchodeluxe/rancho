@@ -3,8 +3,8 @@ before running tests. Travis CI expects that the tests
 will be run from root directory like below
 -----------------------------------------------------------------------
 
-``bash
+```bash
 cd /rancho
-node test/*js
-``
+node test/*.js
+```
 
