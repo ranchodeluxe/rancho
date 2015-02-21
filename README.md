@@ -34,14 +34,14 @@ git clone git@github.com:thebigspoon/rancho.git
 # go read the /test suite
 cd racho/
 python -m SimpleHTTPServer <port>
-# open your browser and go look at /examples
+# open your browser and go look at the tests
 ``` 
 
 ###TODO
 
-* docs
+* write examples
 
-* more examples
+* write docs
 
     
 
